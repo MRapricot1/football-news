@@ -12,6 +12,25 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from main.models import Employee
+
+def delete_news(request, id):
+    news = get_object_or_404(News, pk=id)
+    news.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+def edit_news(request, id):
+    news = get_object_or_404(News, pk=id)
+    form = NewsForm(request.POST or None, instance=news)
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_main')
+
+    context = {
+        'form': form
+    }
+
+    return render(request, "edit_news.html", context)
 
 def logout_user(request):
     logout(request)
@@ -116,3 +135,11 @@ def show_news(request, id):
     }
 
     return render(request, "news_detail.html", context)
+
+def add_employee(request):
+    employee = Employee.objects.create(
+        name = "Theo Samuel",
+        age = 19,
+        persona = "Saya telah menyelesaikan demo PBP TI2"
+    )
+    return render(request, 'main.html', {'name': employee.name, 'age': employee.age, 'persona': employee.persona})

@@ -25,6 +25,8 @@ class News(models.Model):
     is_featured = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     
+
+    
     def __str__(self):
         return self.title
     
@@ -35,3 +37,8 @@ class News(models.Model):
     def increment_views(self):
         self.news_views += 1
         self.save()
+    
+class Employee(models.Model):
+    name = models.CharField(max_length = 255)
+    age = models.IntegerField()
+    persona = models.TextField()
